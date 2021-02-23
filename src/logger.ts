@@ -7,22 +7,46 @@ const errorMap = Object.freeze({
   info: console.log,
 });
 
-type LoggableError = {
+type AditionalLogInformation = {
   who: string,
-  what: string,
-  where: string,
   when: string,
   why: string,
 }
 
 @Singleton
 export class Logger {
-  log(level: string, message: string) {
-    errorMap[level](message);
+  log(level: string, message: string, color: chalk.Chalk) {
+    errorMap[level](color(message));
   }
 
-  error(log: LoggableError) {
-    const message = chalk.bold(`[${log.what}])
-    return log('error');
+  buildMessage(where: string, what: string, aditionalInfo?: AditionalLogInformation) {
+    return `${chalk.bold(`[${where.toUpperCase()}]`)} ${what}`;
+  }
+
+  error(where: string, what: string, aditionalInfo?: AditionalLogInformation) {
+    const red = chalk.rgb(255, 77, 98);
+    return this.log(
+      'error',
+      this.buildMessage(where, what, aditionalInfo),
+      red
+    );
+  }
+
+  warn(where: string, what: string, aditionalInfo?: AditionalLogInformation) {
+    const orange = chalk.rgb(255, 171, 112);
+    return this.log(
+      'warn',
+      this.buildMessage(where, what, aditionalInfo),
+      orange,
+    );
+  }
+
+  info(where: string, what: string, aditionalInfo?: AditionalLogInformation) {
+    const orange = chalk.rgb(255, 171, 112);
+    return this.log(
+      'warn',
+      this.buildMessage(where, what, aditionalInfo),
+      chalk.reset,
+    );
   }
 }
