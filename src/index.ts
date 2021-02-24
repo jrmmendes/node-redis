@@ -34,6 +34,11 @@ router.get('/', async ({ request, response }) => {
   }
 });
 
+router.use(async ({ request, response }) => {
+  response.status = 404;
+  response.body = { message: 'Not Found' };
+});
+
 app.use(morgan('dev'));
 app.use(router.routes());
 
